@@ -15,3 +15,14 @@ def test_api_post_return_response() -> None:
     assert isinstance(data["request_id"], str)
     assert data["request_id"]
     assert data["result"] == "worker-1 processed: Explain queues."
+
+
+def test_api_rejects_invalid_request() -> None:
+    client = TestClient(app)
+    response = client.post(
+        "/inference",
+        json={"prompt": "", "deadline_ms": 0, "priority": -1},
+    )
+    data = response.json()
+    assert response.status_code == 422
+    assert data["detail"]
