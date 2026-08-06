@@ -27,3 +27,6 @@ class EventLog:
 
     def get_events(self) -> list[Event]:
         return self._events
+
+    def clear(self) -> None:
+        self._events.clear()
