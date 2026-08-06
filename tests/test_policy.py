@@ -4,10 +4,7 @@ from helios.worker import MockWorker
 
 def test_select_worker_returns_configured_worker() -> None:
     worker = MockWorker(
-        worker_id = "worker-1",
-        base_latency_ms = 5,
-        capacity = 1,
-        healthy = True
+        worker_id="worker-1", base_latency_ms=5, capacity=1, healthy=True
     )
 
     policy = SingleWorkerPolicy(worker)

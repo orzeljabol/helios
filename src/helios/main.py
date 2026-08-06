@@ -1,9 +1,10 @@
 from datetime import UTC, datetime
+from uuid import uuid4
 
 from fastapi import FastAPI
 
 from helios.events import Event, EventLog, EventType
-from helios.models import InferenceRequest
+from helios.models import InferenceRequest, InferenceResponse
 from helios.policy import SingleWorkerPolicy
 from helios.worker import MockWorker
 
@@ -62,3 +63,20 @@ app = FastAPI(
     title="Helios",
     version="0.1.0",
 )
+
+
+@app.post("/inference", response_model=InferenceResponse)
+async def create_inference(request: InferenceRequest) -> InferenceResponse:
+    request_id = str(uuid4())
+    result = await process_inference(
+        request=request,
+        request_id=request_id,
+        policy=policy,
+        event_log=event_log,
+    )
+    response = InferenceResponse(
+        request_id=request_id,
+        worker_id=worker.worker_id,
+        result=result,
+    )
+    return response
