@@ -1,5 +1,7 @@
 from datetime import UTC, datetime
 
+from fastapi import FastAPI
+
 from helios.events import Event, EventLog, EventType
 from helios.models import InferenceRequest
 from helios.policy import SingleWorkerPolicy
@@ -45,3 +47,7 @@ async def process_inference(
         )
     )
     return result
+app = FastAPI(
+    title="Helios",
+    version="0.1.0",
+)
