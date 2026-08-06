@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from helios.events import Event, EventLog, EventType
 from helios.models import InferenceRequest
 from helios.policy import SingleWorkerPolicy
+from helios.worker import MockWorker
 
 
 async def process_inference(
@@ -47,6 +48,16 @@ async def process_inference(
         )
     )
     return result
+
+
+worker = MockWorker(
+    worker_id="worker-1",
+    base_latency_ms=50,
+    capacity=1,
+    healthy=True,
+)
+policy = SingleWorkerPolicy(worker)
+event_log = EventLog()
 app = FastAPI(
     title="Helios",
     version="0.1.0",
